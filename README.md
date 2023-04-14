@@ -4,4 +4,4 @@ CTF Writeups by: Frederick Pellerin
 
 ## TryHackMe
 
-![Brute It](./Brute It/Brute It.md)
+[Brute It](./Brute%20It/Brute%20It.md)

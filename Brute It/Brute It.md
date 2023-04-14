@@ -1,4 +1,4 @@
-# Brute It
+#
 
 ![0](./_attachment/THM_brute-it_header.png)
 
@@ -8,12 +8,12 @@
 
 ## Overview
 
-This room is a real nice room to skill check yourself.  There are fundamental exercises about brute-forcing, hash cracking and privilege escalation.  If you can't answer a questions, go get the proper information on related rooms.  
+This room is a real nice room to skill check yourself.  To clear the room, we have to answer fundamental questions about brute-forcing, hash cracking and privilege escalation.  If you can't answer a questions, feel free to go get the proper information and come back later.
 
 Let's see how we can solve this room together.
 
 > [!info]
-> I detail my methodology and tough process at the time of writing this.  There are surely dozens more other solutions.  
+> I detail my methodology and tough process at the time of writing.  There are surely dozens more other solutions out there and they are as good as mine.  
 
 ## Start the machine
 
@@ -21,11 +21,11 @@ Let's see how we can solve this room together.
 
 ## Preparation
 
-Let's not waste any time. While the target machine is booting, I make a new basic CTF note file on ObsidianMD (My current note taking tool).  Any text editor will do.  Just prepare yourself a quick way of noting stuff.  
+Let's not waste time. While the target machine is booting, I begin a new file on ObsidianMD (My current note taking app).  A simple text editor can do too.  Just prepare yourself a quick way to take notes when needed.  
 
-After that, I make on my local machine a "`Brute-It`" and a "`nmap`" sub-folder where I will be saving room related files and the `nmap` scan results.
+Then, I make a "`Brute-It`" folder and a "`nmap`" sub-folder where I will be saving room related files and the `nmap` scan results.
 
-![1](./_attachment/35056b49d19f692059f681ed33eb6673_MD5.png)
+![1](./_attachment/THM_Brute-It_header2.png)
 
 Once we know the target machine IP, we can start a terminal an add the `target IP` and `bruteit.thm` into the `/etc/hosts` file.
 
