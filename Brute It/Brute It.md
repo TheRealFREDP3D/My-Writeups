@@ -10,7 +10,7 @@
 
 This room is a real nice room to skill check yourself.  There are fundamental exercises about brute-forcing, hash cracking and privilege escalation.  If you can't answer a questions, go get the proper information on related rooms.  
 
-Let's see how I solve this room together.
+Let's see how we can solve this room together.
 
 > [!info]
 > You wont, find direct answer to the questions here.  I am not a big fan of this kind of writeups.  I'll detail my methodology and tough process at the time of writing this.  There are surely dozens other solutions.  
@@ -21,9 +21,9 @@ Let's see how I solve this room together.
 
 ## Preparation
 
-Let's not waste any time. While the target machine is booting, I make a new basic CTF note file on ObsidianMD (My current note taking tool).  Any text editor will do.  Just prepare yourself a quick mean of noting stufff.  
+Let's not waste any time. While the target machine is booting, I make a new basic CTF note file on ObsidianMD (My current note taking tool).  Any text editor can do.  Just prepare yourself a quick way of noting stuff.  
 
-After that, I make on my local machine a "`Brute-It`" and a "`nmap`" sub-folder where I will be saving my course material and the `nmap` scan results.
+After that, I make on my local machine a "`Brute-It`" and a "`nmap`" sub-folder where I will be saving room related files and the `nmap` scan results.
 
 ![1](./_attachment/e5fe9fb8b14d0c216c4a63ba8561990b_MD5.png)
 
@@ -38,7 +38,7 @@ Once we know the target machine IP, we can start a terminal an add the `target I
 
 Let's discover using `nmap` what are the open ports on the target :  
 
-```nmap -sV -sV -oA nmap/initial bruteit.thm -v
+```nmap -sV -sV -oA nmap/basic bruteit.thm -v
 
 PORT   STATE SERVICE VERSION
 22/tcp open  ssh     OpenSSH 7.6p1 Ubuntu 4ubuntu0.3 (Ubuntu Linux; protocol 2.0)
@@ -54,7 +54,7 @@ Let's check `http://bruteit.thm` in our your browser.  Nothing of interest here.
 
 ## Hidden directories
 
-Are there some notable files and directories hidden from us on the HTTP server? 
+Are there some notable files and directories hidden from us on the HTTP server?
 Let's do a quick scan and get an answer. I like using the tool `dirsearch` for a quick initial scan :
 
 ```❯ dirsearch -u bruteit.thm
@@ -99,7 +99,7 @@ Task Completed
 
 > *[18:40:29] 200 -  671B  - /admin/**
 
-That is one directory that is worth further investigation. Let's type 'http://bruteit.thm/admin' in our favorite Web Browser :
+This is a directory worth further investigation. Let's type 'http://bruteit.thm/admin' in our favorite Web Browser :
 
 ![3](./_attachment/8b430ba0dea2dc37f1f18b4d52e67377_MD5.png)
 
@@ -111,7 +111,7 @@ Let's view the source code of this web page:
 
 Look at that! On line 26 someone left a comment in the code. It was obviously not indented for us but for a "john".
 
-Now we have learned somethings! 
+Now we have learned somethings!
 
 1) `admin` should be a valid username
 2) john is the owner of the `admin` account, let note that `john` could be another username
@@ -122,7 +122,7 @@ Now we have learned somethings!
 
 Now that we have a potentially valid username,  all we need now is to find the associated password.
 
-We'll do that by using Hydra.  It is a nice password brute forcing tool: it is fast, easy to use and well documented.  The principle behind brute forcing is simple.  The tool is going to try to login using the now known `admin` user in combination with every password that are on an existing wordlist.  
+We'll do that by using Hydra.  It is a nice password brute forcing tool: it is fast, easy to use and well documented.  The principle behind brute forcing is simple.  The tool is going to try to login using the now known `admin` user in combination with every password that are on an existing wordlist.  In this case I use `rockyou.txt` as my pass list.
 
 ```❯ hydra -l admin -P /usr/share/wordlists/rockyou.txt 10.10.235.217 http-post-form "/admin/index.php:user=^USER^&pass=^PASS^:Username or password invalid" -V
 
