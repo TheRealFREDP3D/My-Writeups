@@ -264,7 +264,7 @@ User john may run the following commands on bruteit:
     (root) NOPASSWD: /bin/cat
 ```
 
-`john` can run `cat` as root usin `sudo`.  Let's `cat` the `root.txt` flag:
+`john` can run `cat` as **root** using `sudo`.  Let's `cat` the `root.txt` flag:
 
 ``` john@bruteit:~$ sudo cat /root/root.txt
 THM{pr1v1l3g3_3sc4l4t10n}
