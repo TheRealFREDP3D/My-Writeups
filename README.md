@@ -4,4 +4,4 @@ CTF Writeups that I'm the author.
 
 ## TryHackMe
 
-[Brute It](https://)
+[Brute It](/Brute It/Brute It.md)

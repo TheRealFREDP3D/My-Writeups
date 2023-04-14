@@ -1,6 +1,6 @@
 # Brute It
 
-![](CTF/TryHackMe/Brute%20It/_attachment/35056b49d19f692059f681ed33eb6673_MD5.png)
+![Brute It - Header](CTF/TryHackMe/Brute%20It/_attachment/35056b49d19f692059f681ed33eb6673_MD5.png)
 
 ==Writeup by: Frederick Pellerin== - `https://tryhackme.com/room/bruteit`
 
@@ -10,21 +10,22 @@
 
 This room is a real nice room to skill check yourself.  There are fundamental exercises about brute-forcing, hash cracking and privilege escalation.  If you can't answer a questions, go get the proper information on related rooms.  
 
-Let's see how I solve this room together. 
+Let's see how I solve this room together.
 
 > [!info]
 > You wont, find direct answer to the questions here.  I am not a big fan of this kind of writeups.  I'll detail my methodology and tough process at the time of writing this.  There are surely dozens other solutions.  
 
-### Start the machine!###
+## Start the machine
 
 ---
 
-## Preparation 
+## Preparation
 
 Let's not waste any time. While the target machine is booting, I make a new basic CTF note file on ObsidianMD (My current note taking tool).  Any text editor will do.  Just prepare yourself a quick mean of noting stufff.  
 
 After that, I make on my local machine a "`Brute-It`" and a "`nmap`" sub-folder where I will be saving my course material and the `nmap` scan results.
-![](CTF/TryHackMe/Brute%20It/_attachment/e5fe9fb8b14d0c216c4a63ba8561990b_MD5.png)
+
+![](/_attachment/e5fe9fb8b14d0c216c4a63ba8561990b_MD5.png)
 
 Once we know the target machine IP, we can start a terminal an add the `target IP` and `bruteit.thm` into the `/etc/hosts` file.
 
