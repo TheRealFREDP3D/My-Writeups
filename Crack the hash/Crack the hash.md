@@ -1,19 +1,19 @@
-# 
-![Crack-the-hash_Header](CTF/TryHackMe/Crack%20the%20hash/_attachment/46a18daeff8668cae91cc35cc0d1cf8b_MD5.png)
+#
+
+![Crack-the-hash_Header](./_attachment/THM_Crack-the-hash_header.png)
 Writeup by: Frederick Pellerin - `https://tryhackme.com/room/crackthehash`
 
 ---
 
 ## Overview
 
-No surprises here,  this is a cracking hash focused room.  No theory.  Just a bunch of hash to crack on our own. 
+No surprises here,  this is a cracking hash focused room.  No theory.  Just a bunch of hash to crack on our own.
 
 Here are different ways to crack hashes.  But first we need to know what type of hash file we got.
 
-
 ### Online tools
 
-At first, let's use free online tools. 
+At first, let's use free online tools.
 
 There a website, `hashes.com` that could be helpful with hash related stuff.
 
@@ -30,7 +30,7 @@ Let's adjust our strategy.
 
 ### Hashcat
 
-`hashcat` use GPU computing power and is crazy fast. 
+`hashcat` use GPU computing power and is crazy fast.
 
 ```shell
 ❯ hashcat -m 3200 "\$2y\$12\$Dwt1BZj6pcyc3Dy1FWZ5ieeUznr71EeNkJkUlypTsgbX1H68wsRom" /usr/share/wordlists/rockyou.txt
