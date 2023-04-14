@@ -13,7 +13,7 @@ This room is a real nice room to skill check yourself.  There are fundamental ex
 Let's see how we can solve this room together.
 
 > [!info]
-> You wont, find direct answer to the questions here.  I am not a big fan of this kind of writeups.  I'll detail my methodology and tough process at the time of writing this.  There are surely dozens other solutions.  
+> I detail my methodology and tough process at the time of writing this.  There are surely dozens more other solutions.  
 
 ## Start the machine
 
@@ -21,7 +21,7 @@ Let's see how we can solve this room together.
 
 ## Preparation
 
-Let's not waste any time. While the target machine is booting, I make a new basic CTF note file on ObsidianMD (My current note taking tool).  Any text editor can do.  Just prepare yourself a quick way of noting stuff.  
+Let's not waste any time. While the target machine is booting, I make a new basic CTF note file on ObsidianMD (My current note taking tool).  Any text editor will do.  Just prepare yourself a quick way of noting stuff.  
 
 After that, I make on my local machine a "`Brute-It`" and a "`nmap`" sub-folder where I will be saving room related files and the `nmap` scan results.
 
@@ -36,7 +36,7 @@ Once we know the target machine IP, we can start a terminal an add the `target I
 
 ## Discovery of the Open Ports
 
-Let's discover using `nmap` what are the open ports on the target :  
+Let's discover what are the open ports on this target. We will use 'nmap' :  
 
 ``` nmap -sV -sV -oA nmap/basic bruteit.thm -v
 
@@ -50,12 +50,12 @@ Ok, HTTP on 80 and SSH on 22.  Classic!
 
 ### PORT 80 - HTTP - Apache httpd 2.4.29
 
-Let's check `http://bruteit.thm` in our your browser.  Nothing of interest here. Just the basic **Apache2 Web Server Default Page**.  
+Let's check `http://bruteit.thm` in our browsers.  Nothing of interest here. Just the basic **Apache2 Web Server Default Page**.  
 
 ## Hidden directories
 
-Are there some notable files and directories hidden from us on the HTTP server?
-Let's do a quick scan and get an answer. I like using the tool `dirsearch` for a quick initial scan :
+Are there some files and directories hidden from us on the HTTP server?
+Let's do a quick scan and get our answer. For this, I like using the tool `dirsearch`. It is perfect for a quick initial scan :
 
 ``` ❯ dirsearch -u bruteit.thm
 
@@ -103,26 +103,29 @@ This is a directory worth further investigation. Let's type 'http://bruteit.thm/
 
 ![3](./_attachment/8b430ba0dea2dc37f1f18b4d52e67377_MD5.png)
 
-This is what we are looking for.  A login page!
+This is what we were looking for.  A login page!
 
 Let's view the source code of this web page:
 
 ![4](./_attachment/de34af8b42c95b4a41c9292ca2168c41_MD5.png)
 
-Look at that! On line 26 someone left a comment in the code. It was obviously not indented for us but for a "john".
+Look at that!
+On line #26, someone left a comment in the code. It was obviously not indented for us but for a "john".
 
-Now we have learned somethings!
+Now we learned something valuable!
 
-1) `admin` should be a valid username
-2) john is the owner of the `admin` account, let note that `john` could be another username
+1) `admin` should be a valid **username**
+2) `john` is the owner of the `admin` account, let note that `john` could be another **username**
 
 ---
 
 ## Brute Force Passwords
 
-Now that we have a potentially valid username,  all we need now is to find the associated password.
+Now that we have a potentially valid username,  all we need now is to find the matching password.
 
-We'll do that by using Hydra.  It is a nice password brute forcing tool: it is fast, easy to use and well documented.  The principle behind brute forcing is simple.  The tool is going to try to login using the now known `admin` user in combination with every password that are on an existing wordlist.  In this case I use `rockyou.txt` as my pass list.
+We'll do that using Hydra.  It is a nice brute forcing tool. It is fast, easy to use and well documented.  
+
+The process off brute forcing is simple.  The tool is going to try to login using the now known `admin` user in combination with a wordlist.  In this case I use `rockyou.txt` as my dictionary.
 
 ``` ❯ hydra -l admin -P /usr/share/wordlists/rockyou.txt 10.10.235.217 http-post-form "/admin/index.php:user=^USER^&pass=^PASS^:Username or password invalid" -V
 
@@ -177,11 +180,11 @@ Let's go back to the web page to enter our valid credentials.
 ## Crack the Hash
 
 Back to the terminal!
-The `id_rsa` is a Private Key file.  These files are used as credentials to connect to SSH servers.  The password is encrypted in the file.  To extract it, we are going to ***Crack the Hash*** with `JohnTheRipper`.
+The `id_rsa` is a **Private Key** file.  These files are used as credentials to connect to **SSH** servers.  The **password** is encrypted in the file.  To extract it, we are going to ***Crack the Hash*** with `JohnTheRipper`.
 
 First, let's create an **hash file** from `id_rsa`. I used a Python script named `ssh2john.py`.  When done, let's start John and wait while he does his business:
 
-``` ❯ ssh2john id_rsa > hash.txt
+``` ❯ ssh2john id_rsa > id_rsa.hash
 
 ❯ john id_rsa.hash --fork=4 -w=/usr/share/wordlists/rockyou.txt
 Using default input encoding: UTF-8
@@ -199,12 +202,12 @@ Waiting for 3 children to terminate
 Session completed. 
 ```
 
-We got a match!  The **password** is : `rockinroll`
+We got a match!
+The **password** is : `rockinroll`
 
-We want to change file permission of id_rsa:
+We want to give us ownership of the id_rsa key by changing its **file permission**:
 
 ``` chmod 400 id_rsa
-ls -la
 ```
 
 ![6](./_attachment/8225b5c5c84d9f929a27f674bd5165fb_MD5.png)
@@ -212,7 +215,7 @@ We can see now that `id_rsa` is read-only and for a single user, me.
 
 ## PORT 22 - SSH - OpenSSH 7.6p1
 
-Let use everything we have gathered so far and connect user john on SSH using the cracked password:
+Now, it is time to use everything we have gathered so far and connect to the target using **username** `john` on SSH:
 
 ``` ❯ ssh -i id_rsa john@bruteit.thm
 The authenticity of host 'bruteit.thm (10.10.150.236)' can't be established.
@@ -251,15 +254,19 @@ user.txt
 
 ## Now let's get root
 
+Let's check what command `john` can run as root:
+
 ``` john@bruteit:~$ sudo -l
 Matching Defaults entries for john on bruteit:
     env_reset, mail_badpass, secure_path=/usr/local/sbin\:/usr/local/bin\:/usr/sbin\:/usr/bin\:/sbin\:/bin\:/snap/bin
 
 User john may run the following commands on bruteit:
     (root) NOPASSWD: /bin/cat
+```
 
+`john` can run `cat` as root usin `sudo`.  Let's `cat` the `root.txt` flag:
 
-john@bruteit:~$ sudo cat /root/root.txt
+``` john@bruteit:~$ sudo cat /root/root.txt
 THM{pr1v1l3g3_3sc4l4t10n}
 john@bruteit:~$
 ```
