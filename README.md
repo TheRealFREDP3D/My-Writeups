@@ -1,7 +1,7 @@
 # My Writeups
 
-CTF Writeups that I'm the author.
+CTF Writeups by: Frederick Pellerin
 
 ## TryHackMe
 
-[Brute It](./Brute It/Brute It.md)
+![Brute It](./Brute It/Brute It.md)
