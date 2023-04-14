@@ -1,6 +1,6 @@
 # Brute It
 
-![Brute It - Header](./_attachment/35056b49d19f692059f681ed33eb6673_MD5.png)
+![Brute It - Header](./_attachment/THM_brute-it_header.png)
 
 ==Writeup by: Frederick Pellerin== - `https://tryhackme.com/room/bruteit`
 
