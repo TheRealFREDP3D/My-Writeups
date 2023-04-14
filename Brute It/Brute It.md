@@ -8,7 +8,9 @@
 
 ## Overview
 
-This room is a real nice room to skill check yourself.  To clear the room, we have to answer fundamental questions about brute-forcing, hash cracking and privilege escalation.  If you can't answer a questions, feel free to go get the proper information and come back later.
+This room is a really nice room to skillcheck some basic tools and procedures.  To clear the room, we will answer simple questions about brute-forcing, hash cracking and privilege escalation.  
+
+If you can't answer a questions, feel free to go get the proper information and come back later.
 
 Let's see how we can solve this room together.
 
