@@ -25,14 +25,14 @@ Let's not waste time. While the target machine is booting, I begin a new file on
 
 Then, I make a "`Brute-It`" folder and a "`nmap`" sub-folder where I will be saving room related files and the `nmap` scan results.
 
-![1](./_attachment/THM_Brute-It_header2.png)
+![1](./_attachment/e5fe9fb8b14d0c216c4a63ba8561990b_MD5.png)
 
 Once we know the target machine IP, we can start a terminal an add the `target IP` and `bruteit.thm` into the `/etc/hosts` file.
 
 ```sudo nano /etc/hosts
 ```
 
-![2](./_attachment/0277fd0cdd51ea82094d578a8b7fc226_MD5.png)
+![2](./_attachment/THM_Brute-It_hosts-file.png)
 
 ## Discovery of the Open Ports
 
@@ -101,13 +101,13 @@ Task Completed
 
 This is a directory worth further investigation. Let's type 'http://bruteit.thm/admin' in our favorite Web Browser :
 
-![3](./_attachment/8b430ba0dea2dc37f1f18b4d52e67377_MD5.png)
+![3](./_attachment/THM_Brute-It_http-login.png)
 
 This is what we were looking for.  A login page!
 
 Let's view the source code of this web page:
 
-![4](./_attachment/de34af8b42c95b4a41c9292ca2168c41_MD5.png)
+![4](,/../_attachment/HTTP_Brute-It_http-login-source.png)
 
 Look at that!
 On line #26, someone left a comment in the code. It was obviously not indented for us but for a "john".
@@ -173,7 +173,7 @@ Bingo! The valid credentials are brute-forced.
 
 Let's go back to the web page to enter our valid credentials.
 
-![5](./_attachment/f60260a7cfdd3db110d2650d961dbe9a_MD5.png)
+![5](./_attachment/THM_Brute-It_id_rsa.png)
 
 *Right-Click* and save the `id_rsa` link to your machine.
 
@@ -210,7 +210,7 @@ We want to give us ownership of the id_rsa key by changing its **file permission
 ``` chmod 400 id_rsa
 ```
 
-![6](./_attachment/8225b5c5c84d9f929a27f674bd5165fb_MD5.png)
+![6](./_attachment/THM_Brute-It_id_rsa-file-perm.png)
 We can see now that `id_rsa` is read-only and for a single user, me.
 
 ## PORT 22 - SSH - OpenSSH 7.6p1
@@ -272,3 +272,5 @@ john@bruteit:~$
 ```
 
 ## COMPLETED
+
+![Completed!](./_attachment/THM_Brute-It_header2.png)
