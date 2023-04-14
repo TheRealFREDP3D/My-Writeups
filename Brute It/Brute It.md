@@ -25,7 +25,7 @@ Let's not waste any time. While the target machine is booting, I make a new basi
 
 After that, I make on my local machine a "`Brute-It`" and a "`nmap`" sub-folder where I will be saving room related files and the `nmap` scan results.
 
-![1](./_attachment/e5fe9fb8b14d0c216c4a63ba8561990b_MD5.png)
+![1](./_attachment/35056b49d19f692059f681ed33eb6673_MD5.png)
 
 Once we know the target machine IP, we can start a terminal an add the `target IP` and `bruteit.thm` into the `/etc/hosts` file.
 
