@@ -1,6 +1,7 @@
 # My Writeups
 
-CTF Writeups by: Frederick Pellerin
+CTF Writeups
+By: Frederick Pellerin
 
 ## TryHackMe
 
