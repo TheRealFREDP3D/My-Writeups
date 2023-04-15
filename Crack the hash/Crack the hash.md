@@ -104,7 +104,7 @@ Hardware.Mon.#1..: Util: 94%
 
 ```
 
-We have a match!  `xXxXxXxX`. 
+We have a match!  `xXxXxXxX`.
 
 ---
 
