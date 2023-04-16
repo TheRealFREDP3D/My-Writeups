@@ -308,3 +308,5 @@ There it is! The **root password** is `football`
 ## COMPLETED
 
 ![Completed!](./_attachment/THM_Brute-It_header2.png)
+
+![pdf-version](THM%20-%20Brute%20It-pdf.pdf)
