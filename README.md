@@ -2,7 +2,8 @@
 
 ### Brute It
 
-[Brute It](./Brute%20It/Brute%20It.md) - #hydra, #ssh2john, #john, #sudo, #unshadow
+#hydra, #ssh2john, #john, #sudo, #unshadow
+[Brute It](./Brute%20It/Brute%20It.md)
 ![Brute-It-Header](./Brute%20It/_attachment/THM_brute-it_header.png)
 
 ---
