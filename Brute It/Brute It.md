@@ -280,7 +280,7 @@ User john may run the following commands on bruteit:
 
 ```shell
  john@bruteit:~$ sudo cat /root/root.txt
-THM{ZZXXXZZXXXZZXXXZZXXXZZXXXZZXXX}
+THM{[REDACTED]}
 john@bruteit:~$
 ```
 
@@ -300,10 +300,10 @@ Now let's 'John' crack the file:
 john --wordlist=/usr/share/wordlist/rockyou.txt pass.txt
 
 john --show pass.txt
-root:football:0:0:root:/root:/bin/bash
+root:[REDACTED]:0:0:root:/root:/bin/bash
 ```
 
-There it is! The **root password** is `football`
+There it is! The **root password** is [REDACTED]
 
 ## COMPLETED
 
