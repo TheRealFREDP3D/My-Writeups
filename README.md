@@ -1,4 +1,6 @@
-These are the writeups I made so far for Tryhackme.com platform. 
+These are the writeups I made so far.  I'm currently working on a way to publish the notes I take while solving a room directly on my website.
+
+When my new workflow will be operational, I will put the link here --> ==TODO: Add Link==
 
 # Tryhackme.com
 
