@@ -1,4 +1,6 @@
-# TryHackMe.com Writeups
+These are the writeups I made so far for Tryhackme.com platform. 
+
+# Tryhackme.com
 
 ### Brute It
 
