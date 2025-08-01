@@ -1,6 +1,6 @@
 #
 
-![Crack-the-hash_Header](./_attachment/THM_Crack-the-hash_header.png)
+![Crack-the-hash_Header](./_attachment/thm-crack-the-hash-header.png)
 Writeup by: Frederick Pellerin - `https://tryhackme.com/room/crackthehash`
 
 ---

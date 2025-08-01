@@ -1,6 +1,6 @@
 #
 
-![0](./_attachment/THM_brute-it_header.png)
+![0](./_attachment/thm-brute-it-header.png)
 
 ==Writeup by: Frederick Pellerin== - `https://tryhackme.com/room/bruteit`
 
@@ -27,7 +27,7 @@ Let's not waste time. While the target machine is booting, I begin a new file on
 
 Then, I make a "`Brute-It`" folder and a "`nmap`" sub-folder where I will be saving room related files and the `nmap` scan results.
 
-![1](./_attachment/e5fe9fb8b14d0c216c4a63ba8561990b_MD5.png)
+![1](./_attachment/directory-structure.png)
 
 Once we know the target machine IP, we can start a terminal an add the `target IP` and `bruteit.thm` into the `/etc/hosts` file.
 
@@ -35,7 +35,7 @@ Once we know the target machine IP, we can start a terminal an add the `target I
 sudo nano /etc/hosts
 ```
 
-![2](./_attachment/THM_Brute-It_hosts-file.png)
+![2](./_attachment/thm-brute-it-hosts-file.png)
 
 ## Enumeration of the Open Ports
 
@@ -106,13 +106,13 @@ Task Completed
 
 This is a directory worth further investigation. Let's type 'http://bruteit.thm/admin' in our favorite web browser :
 
-![3](./_attachment/THM_Brute-It_http-login.png)
+![3](./_attachment/thm-brute-it-http-login.png)
 
 This is what we were looking for.  A login page!
 
 Let's view the source code of this web page:
 
-![4](,/../_attachment/HTTP_Brute-It_http-login-source.png)
+![4](./_attachment/http-brute-it-http-login-source.png)
 
 Look at that!
 On line #26, someone left a comment in the code. It was obviously not indented for us but for a "john".
@@ -179,7 +179,7 @@ Bingo! The valid credentials are brute-forced.
 
 Let's go back to the login web page to enter our new credentials.
 
-![5](./_attachment/THM_Brute-It_id_rsa.png)
+![5](./_attachment/thm-brute-it-id-rsa.png)
 
 *Right-Click* and save the `id_rsa` link to your machine.
 
@@ -218,7 +218,7 @@ We need to give us ownership of the id_rsa key to be able to use it ourself.  To
 chmod 400 id_rsa
 ```
 
-![6](./_attachment/THM_Brute-It_id_rsa-file-perm.png)
+![6](./_attachment/thm-brute-it-id-rsa-file-perm.png)
 We can check with `ls -la` that `id_rsa` is now read-only and owned by a single user, me.
 
 ## PORT 22 - SSH - OpenSSH 7.6p1
@@ -307,6 +307,6 @@ There it is! The **root password** is [REDACTED]
 
 ## COMPLETED
 
-![Complete!](./_attachment/THM_Brute-It_header2.png)
+![Complete!](./_attachment/thm-brute-it-header2.png)
 
-![pdf-version](./THM%20-%20Brute%20It-pdf.pdf)
+[pdf-version](./THM-Brute%20It.pdf)
