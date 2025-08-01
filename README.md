@@ -20,8 +20,8 @@ Tags: hydra, ssh2john, john, sudo, unshadow
 
 ---
 
-![Brute-It-Header](./Brute%20It/_attachment/THM_brute-it_header.png)  
-[Brute It](./Brute%20It/Brute%20It.md)
+![Brute-It-Header](./brute-it/_attachment/thm-brute-it-header.png)
+[Brute It](./brute-it/brute-it.md)
 
 ---
 
@@ -33,7 +33,7 @@ Tags: hashes.com, CyberChef, Cracking-station.net, hashcat
 
 ---
 
-![Crack the Hash](./Crack%20the%20hash/_attachment/THM_Crack-the-hash_header.png)  
-[Crack the hash](./Crack%20the%20hash/Crack%20the%20hash.md) 
+![Crack the Hash](./crack-the-hash/_attachment/thm-crack-the-hash-header.png)
+[Crack the hash](./crack-the-hash/crack-the-hash.md)
 
 ---
